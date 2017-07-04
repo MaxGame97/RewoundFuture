@@ -11,7 +11,7 @@ interface ITimeManipulation
     float GetTimeScale();
 }
 
-public class TimeManager : MonoBehaviour, ITimeManipulation {
+public class Old_TimeManager : MonoBehaviour, ITimeManipulation {
 
     public float m_timeScale = 0;
     public Vector2 m_timeZoneLeft = Vector2.left;
@@ -20,20 +20,20 @@ public class TimeManager : MonoBehaviour, ITimeManipulation {
     Transform m_playerPos;
 
 	void Start () {
-		if (FindObjectsOfType<TimeManager>().Length > 1)
+		if (FindObjectsOfType<Old_TimeManager>().Length > 1)
         {
             Debug.LogWarning("WARNING: More than one Time Manager in scene");
         }
 
-        if (FindObjectOfType<PlayerController>())
+        if (FindObjectOfType<Old_PlayerController>())
         {
-            if (FindObjectsOfType<PlayerController>().Length > 1)
+            if (FindObjectsOfType<Old_PlayerController>().Length > 1)
             {
                 Debug.LogWarning("AAAAAAAAA MORE THAN ONE PLAYER IN SCENE");
             }
             else
             {
-                m_playerPos = FindObjectOfType<PlayerController>().transform;
+                m_playerPos = FindObjectOfType<Old_PlayerController>().transform;
             }
         }
 	}

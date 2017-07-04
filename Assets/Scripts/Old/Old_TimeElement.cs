@@ -7,7 +7,7 @@ public enum ElementType
     BOOL, INT, FLOAT
 }
 
-public class TimeElement : MonoBehaviour {
+public class Old_TimeElement : MonoBehaviour {
 
     public ElementType m_eType;
 

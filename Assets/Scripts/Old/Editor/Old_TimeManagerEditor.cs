@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor(typeof(TimeManager))]
+[CustomEditor(typeof(Old_TimeManager))]
 [CanEditMultipleObjects]
 class TimeManagerEditor : Editor
 {
@@ -27,7 +27,7 @@ class TimeManagerEditor : Editor
 
     public void OnSceneGUI()
     {
-        var t = (target as TimeManager);
+        var t = (target as Old_TimeManager);
 
         EditorGUI.BeginChangeCheck();
 

@@ -12,7 +12,7 @@ public enum MovementState
     idle, running, jumping, falling, landing
 }
 
-public class PlayerController : MonoBehaviour
+public class Old_PlayerController : MonoBehaviour
 {
     public LayerMask m_collisionMask;
     
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer m_spriteRenderer;
     Animator m_animator;
     Vector2 m_directionVector;
-    PlayerAttack m_attack;
+    Old_PlayerAttack m_attack;
 
     void Start()
     {
@@ -70,7 +70,9 @@ public class PlayerController : MonoBehaviour
         m_currentMaxJumpHeight = m_jumpHeight;
         m_rigidbody = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
-        m_attack = GetComponent<PlayerAttack>();
+        m_attack = GetComponent<Old_PlayerAttack>();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void FixedUpdate()

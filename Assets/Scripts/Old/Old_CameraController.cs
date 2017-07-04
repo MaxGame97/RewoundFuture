@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class Old_CameraController : MonoBehaviour {
 
-    PlayerController m_player;
+    Old_PlayerController m_player;
     const float m_zLayer = -10;
 
 	void Start () {
-        if (m_player = FindObjectOfType<PlayerController>())
+        if (m_player = FindObjectOfType<Old_PlayerController>())
         {
             print("CAMERA, Player found");
         }

@@ -11,7 +11,7 @@ public class AttackInfo
     public Vector2 offset;
 }
 
-public class PlayerAttack : MonoBehaviour {
+public class Old_PlayerAttack : MonoBehaviour {
 
     public AttackInfo[] m_attacks;
     public GameObject[] m_triggers;
@@ -40,6 +40,6 @@ public class PlayerAttack : MonoBehaviour {
     void CreateDamageTrigger(float duration, int damage, Vector2 offset)
     {
         GameObject g = Instantiate<GameObject>(m_triggers[0], transform.position + (Vector3)offset, Quaternion.identity, transform);
-        g.GetComponent<TriggerDamage>().Init(duration, m_tags, damage);
+        g.GetComponent<Old_TriggerDamage>().Init(duration, m_tags, damage);
     }
 }

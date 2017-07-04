@@ -2,9 +2,9 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor(typeof(TimeElement))]
+[CustomEditor(typeof(Old_TimeElement))]
 [CanEditMultipleObjects]
-class TimeElementEditor : Editor
+class Old_TimeElementEditor : Editor
 {
     SerializedProperty m_type;
     SerializedProperty m_bool;

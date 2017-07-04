@@ -9,8 +9,8 @@ interface IDamagable
 }
 
 [System.Serializable]
-public class Stats{
-
+public class Stats
+{
     public int maxHealth;
     public int health;
 

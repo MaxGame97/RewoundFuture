@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerDamage : MonoBehaviour {
+public class Old_TriggerDamage : MonoBehaviour {
 
     string[] m_triggerTags;
     float m_lifetime;
