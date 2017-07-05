@@ -38,9 +38,9 @@ public class DoorBehaviour : MonoBehaviour {
 
 
 
-    // ---------------------
-    // --- Public values ---
-    // ---------------------
+    // -------------------------
+    // --- Public properties ---
+    // -------------------------
 
     public int ID { get { return iD; } }
 
@@ -131,10 +131,14 @@ public class DoorBehaviour : MonoBehaviour {
         // --- Draw a representation of the level load area ---
         // ----------------------------------------------------
 
+        // Get the size that the cube should be drawn with, from the collider's bounds
+        Vector3 cubeSize = GetComponent<Collider2D>().bounds.size;
+
         // Set the gizmos color to green (50% transparent)
         Gizmos.color = new Color(0, 1, 0, 0.5F);
+
         // Draw a cube at the level load object's position, using the local scale as its size
-        Gizmos.DrawCube(transform.position, transform.localScale);
+        Gizmos.DrawCube(transform.position, cubeSize);
     }
 
     // OnSceneLoad is called when a new scene has finished loading
