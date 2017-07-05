@@ -48,8 +48,35 @@ public class CameraBehaviour : MonoBehaviour {
         // Get the camera instance
         cameraInstance = GetComponent<Camera>();
 
+        // If no camera has been found, cancel and deactivate this script
+        if (cameraInstance == null)
+        {
+            // Log an error message
+            Debug.LogError("Camera behaviour script assigned to object without camera, camera behaviour disabled");
+
+            // Deactivate this script
+            enabled = false;
+
+            // Exit this function
+            return;
+        }
+
         // Find a camera bounds component, this will be used to clamp the camera's position
         cameraBounds = FindObjectOfType<CameraBounds>();
+
+        // If no camera bounds has been found, log a warning
+        if (cameraBounds == null)
+            Debug.LogWarning("No camera bounds has been found, camera clamping functionality disabled");
+
+        // If the cameraBounds do not appear to be set, log a warning and disable the camera clamping functionality
+        if(cameraBounds.HorizontalBounds == Vector2.zero || cameraBounds.VerticalBounds == Vector2.zero)
+        {
+            // Set the cameraBounds to null (disable it)
+            cameraBounds = null;
+
+            // Log a warning message
+            Debug.LogWarning("Camera bounds appear to not be configured, camera clamping functionality disabled");
+        }
 
         // Run the camera clamp size function
         ClampCameraSize();
@@ -95,6 +122,10 @@ public class CameraBehaviour : MonoBehaviour {
     // Clamps the camera position so it is not outside the camera bounds
     void ClampCameraPosition()
     {
+        // If no camera bounds has been set, exit this function
+        if (cameraBounds == null)
+            return;
+
         // If the this camera is set to be clamped
         if (clampCameraPosition)
         {
@@ -155,6 +186,10 @@ public class CameraBehaviour : MonoBehaviour {
     // Clamps the camera size if the camera bounds cannot contain it
     void ClampCameraSize()
     {
+        // If no camera bounds has been set, exit this function
+        if (cameraBounds == null)
+            return;
+        
         // If the camera size mode is set to be clamped
         if (cameraSizeMode == CameraSizeMode.Clamped)
         {

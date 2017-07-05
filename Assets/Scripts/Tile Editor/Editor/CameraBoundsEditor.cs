@@ -20,6 +20,8 @@ public class CameraBoundsEditor : Editor
             t.GenerateRoughCameraBounds();
             
             SceneView.RepaintAll();
+
+            EditorUtility.SetDirty(t);
         }
     }
 }
