@@ -26,6 +26,12 @@ public class DoorBehaviour : MonoBehaviour {
     [SerializeField] private string sceneName;              // The scene to load when the player enters this door
     [SerializeField] private int doorID;                    // The door in the new scene that this door leads to
 
+    [Header("Fade values")]
+
+    [SerializeField] private GameObject fadeOutPrefab;      // Prefab used for the fade out effect
+    [SerializeField] private Texture fadeTexture;           // The texture used to fade out the screen
+    [SerializeField] private float fadeSpeed;               // The speed of the fade out effect (in seconds, larger takes longer time)
+
 
 
     // ----------------------
@@ -34,6 +40,7 @@ public class DoorBehaviour : MonoBehaviour {
 
     GameObject playerInstance;                              // The persistent player instance
 
+    float fadeAlpha;                                        // The current alpha for the screen fade effect
     float carryoverPosition;                                // Carryover value to correctly position the player after a transition
 
 
@@ -51,6 +58,9 @@ public class DoorBehaviour : MonoBehaviour {
     {
         // Find the persistent player instance
         playerInstance = GameObject.FindGameObjectWithTag(playerTag);
+
+        // Set the fade alpha to 0
+        fadeAlpha = 0f;
     }
     
     // OnTriggerExit2D is called when the collider stops being intersected by another collider (on the same collision layer)
@@ -93,7 +103,7 @@ public class DoorBehaviour : MonoBehaviour {
 
 
         // If the player triggered this function
-        if (collision.tag == playerTag)
+        if (collision.gameObject == playerInstance)
         {
             // Set this GameObject not to be destroyed on scene load
             DontDestroyOnLoad(gameObject);
@@ -119,9 +129,18 @@ public class DoorBehaviour : MonoBehaviour {
 
 
 
-            // Load the new scene
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            // Set the player instance to be inactive
+            playerInstance.SetActive(false);
+
+            // Start the fade and load coroutine
+            StartCoroutine(FadeInAndLoad());
         }
+    }
+
+    private void OnGUI()
+    {
+        GUI.color = new Color(0f, 0f, 0f, fadeAlpha);
+        GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), fadeTexture); 
     }
 
     // OnDrawGizmosSelected is called when the object is selected and gizmos are enabled
@@ -141,6 +160,30 @@ public class DoorBehaviour : MonoBehaviour {
         Gizmos.DrawCube(transform.position, cubeSize);
     }
 
+    // Increases the fade alpha and when it reaches 1, loads the scene
+    IEnumerator FadeInAndLoad()
+    {
+        // While the fade alpha is smaller than 1
+        while (fadeAlpha < 1f)
+        {
+            // Increase the fade alpha based on the fade speed
+            fadeAlpha += (1 / fadeSpeed) * Time.deltaTime;
+
+            // If the fade alpha is larger than 1
+            if (fadeAlpha > 1f)
+                // Set it to 1
+                fadeAlpha = 1f;
+
+            yield return null;
+        }
+
+        // Set the player instance to be active
+        playerInstance.SetActive(true);
+
+        // Load the new scene
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    }
+    
     // OnSceneLoad is called when a new scene has finished loading
     public void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
@@ -150,9 +193,6 @@ public class DoorBehaviour : MonoBehaviour {
 
         // Tell the OnSceneLoad function to stop listening for a scene to change
         SceneManager.sceneLoaded -= OnSceneLoad;
-
-        // Remove the tag on this door
-        tag = "Untagged";
 
         // Find all instances of player objects
         GameObject[] players = GameObject.FindGameObjectsWithTag(playerTag);
@@ -174,19 +214,19 @@ public class DoorBehaviour : MonoBehaviour {
         // --- Relocate player ---
         // -----------------------
 
-        // Create a transform representing the door transitioning to's GameObject
+        // Create a GameObject that represent the target door
         GameObject door = new GameObject();
 
         // Find all instances of door objects
-        DoorBehaviour[] doors = GameObject.FindObjectsOfType<DoorBehaviour>();
+        DoorBehaviour[] doors = FindObjectsOfType<DoorBehaviour>();
         
         // Check all doors
         for (int i = 0; i < doors.Length; i++)
         {
-            // If one of them matches the desired door ID
-            if (doorID == doors[i].GetComponent<DoorBehaviour>().ID)
+            // If one of them matches the desired door ID, as long as it isn't this door
+            if (doorID == doors[i].GetComponent<DoorBehaviour>().ID && doors[i] != this)
             {
-                // Set the door GameObject to this door
+                // Set the target door to this door
                 door = doors[i].gameObject;
 
                 // Break out of the loop
@@ -194,18 +234,15 @@ public class DoorBehaviour : MonoBehaviour {
             }
         }
 
-        // Find the player object
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
         // Move the player to the door position
-        player.transform.position = door.transform.position;
+        playerInstance.transform.position = door.transform.position;
 
         // Translates the player to the correct position depending on the door direction, based on the carryover position value
         switch (doorDirection)
         {
             case Direction.Left:
                 // Translate the player based on the carryover position value
-                player.transform.Translate(new Vector3(0f, carryoverPosition, 0f));
+                playerInstance.transform.Translate(new Vector3(0f, carryoverPosition, 0f));
 
                 // Log a warning if the two connected door's sizes aren't matching
                 if (GetComponent<Collider2D>().bounds.size.y != door.GetComponent<Collider2D>().bounds.size.y)
@@ -215,7 +252,7 @@ public class DoorBehaviour : MonoBehaviour {
 
             case Direction.Right:
                 // Translate the player based on the carryover position value
-                player.transform.Translate(new Vector3(0f, carryoverPosition, 0f));
+                playerInstance.transform.Translate(new Vector3(0f, carryoverPosition, 0f));
 
                 // Log a warning if the two connected door's sizes aren't matching
                 if (GetComponent<Collider2D>().bounds.size.y != door.GetComponent<Collider2D>().bounds.size.y)
@@ -225,7 +262,7 @@ public class DoorBehaviour : MonoBehaviour {
 
             case Direction.Up:
                 // Translate the player based on the carryover position value
-                player.transform.Translate(new Vector3(carryoverPosition, 0f, 0f));
+                playerInstance.transform.Translate(new Vector3(carryoverPosition, 0f, 0f));
 
                 // Log a warning if the two connected door's sizes aren't matching
                 if (GetComponent<Collider2D>().bounds.size.x != door.GetComponent<Collider2D>().bounds.size.x)
@@ -235,7 +272,7 @@ public class DoorBehaviour : MonoBehaviour {
 
             case Direction.Down:
                 // Translate the player based on the carryover position value
-                player.transform.Translate(new Vector3(carryoverPosition, 0f, 0f));
+                playerInstance.transform.Translate(new Vector3(carryoverPosition, 0f, 0f));
 
                 // Log a warning if the two connected door's sizes aren't matching
                 if (GetComponent<Collider2D>().bounds.size.x != door.GetComponent<Collider2D>().bounds.size.x)
@@ -251,9 +288,15 @@ public class DoorBehaviour : MonoBehaviour {
         // -----------------------
 
         // Add a GetCamera component to the player instance
-        player.AddComponent<GetCamera>();
+        playerInstance.AddComponent<GetCamera>();
 
-        // Destroy this GameObject
+        // Instantiates the door fade out prefab
+        DoorFadeOut fadeOutInstance = Instantiate(fadeOutPrefab).GetComponent<DoorFadeOut>();
+
+        // Sets the door fade out instance's values to the ones assigned in this script
+        fadeOutInstance.FadeSpeed = fadeSpeed;
+
+        // Destroys this GameObject
         Destroy(gameObject);
     }
 }

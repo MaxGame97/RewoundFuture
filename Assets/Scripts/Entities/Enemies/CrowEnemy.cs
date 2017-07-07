@@ -347,7 +347,7 @@ public class CrowEnemy : MonoBehaviour {
         currentState.Transition(ref currentState, new IdleGroundState(this));
     }
 
-    // Update is called once per frame
+    // FixedUpdate is called once per phyiscs update
     void Update()
     {
         // Update the current state

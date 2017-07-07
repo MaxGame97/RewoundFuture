@@ -42,6 +42,14 @@ public class CameraBehaviour : MonoBehaviour {
 
 
 
+    // -------------------------
+    // --- Public properties ---
+    // -------------------------
+
+    public Vector2 OrthographicSize { get { return orthographicSize; } }
+
+
+
     // Use this for initialization
     void Start()
     {
@@ -186,6 +194,9 @@ public class CameraBehaviour : MonoBehaviour {
     // Clamps the camera size if the camera bounds cannot contain it
     void ClampCameraSize()
     {
+        // Get the preferred camera height
+        float cameraHeight = preferredCameraSize;
+
         // If no camera bounds has been set, exit this function
         if (cameraBounds == null)
             return;
@@ -193,9 +204,6 @@ public class CameraBehaviour : MonoBehaviour {
         // If the camera size mode is set to be clamped
         if (cameraSizeMode == CameraSizeMode.Clamped)
         {
-            // Get the preferred camera height
-            float cameraHeight = preferredCameraSize;
-
             // Get the camera bounds height
             float cameraBoundsHeight = (cameraBounds.VerticalBounds.y - cameraBounds.VerticalBounds.x) / 2;
 
