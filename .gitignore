@@ -34,3 +34,5 @@ sysinfo.txt
 *.unitypackage
 fmod.log
 fmod_editor.log
+Assets/FMODStudioCache.asset
+Assets/StreamingAssets/*.bank
