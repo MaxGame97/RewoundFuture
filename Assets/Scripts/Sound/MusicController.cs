@@ -3,30 +3,20 @@
 public class MusicController : MonoBehaviour {
 
 
-    public EventPlayer MusicToControl;
-	public float ParamValue = 1f;
+    public EventPlayer currentMusic;
+	
 
-
-
-	// Update is called once per frame
-	void Update ()
+    void Start()
     {
-		//if(	Input.GetKeyDown(KeyCode.M))
-		//{
-		//	MusicToControl.ChangeParameter("Transition", ParamValue);
-		//}
+        currentMusic = GameObject.Find("Music_Level1_DecrepidShrine").GetComponent<EventPlayer>();
+    }
+
+    public void Music_InLevelTransition(float TransitionValue)
+    {
+
+        currentMusic.ChangeParameter("Transition1", TransitionValue);
+
+    }
 
 
-	}
-
-	void OnTriggerEnter2D(Collider2D col)
-	{
-	
-		Debug.Log ("triggered");
-		MusicToControl.ChangeParameter("Transition", ParamValue);
-
-	}
-
-
-	
 }
