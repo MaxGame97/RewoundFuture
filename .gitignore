@@ -32,7 +32,13 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# FMOD
 fmod.log
 fmod_editor.log
 Assets/FMODStudioCache.asset
 Assets/StreamingAssets/*.bank
+Assets/StreamingAssets/Master Bank.bank.meta
+Assets/StreamingAssets/Master Bank.strings.bank.meta
+Assets/StreamingAssets/Master Bank.bank.meta
+Assets/StreamingAssets/Master Bank.strings.bank.meta
