@@ -89,9 +89,9 @@ public class GridEditor : Editor {
         InfoBox("Toggle if you need Help. All info will be ABOVE the given option.");
         if (m_grid.m_helpBoxes = EditorGUILayout.Toggle("Enable Help?", m_grid.m_helpBoxes))
 
-        InfoBox("Toggles the visible Grid in scene-view, on/off.");
+            InfoBox("Toggles the visible Grid in scene-view, on/off.");
         // Toggle box to enable/disable the grid
-        if (GUILayout.Button("Toggle Grid")) 
+        if (GUILayout.Button("Toggle Grid"))
         {
             m_grid.m_displayGrid = !m_grid.m_displayGrid;
 
@@ -141,6 +141,12 @@ public class GridEditor : Editor {
 
             InfoBox("Here you can select your layer. -5 is FRONT and 5 is BACK. Get used to it (Or I can change)");
             LayerSelection();
+
+            EditorGUILayout.Space();
+            
+            InfoBox("Toggles the placement of one way platforms, on/off.");
+            // Toggle box to enable/disable placement of one way platforms
+            m_grid.m_oneWay = EditorGUILayout.Toggle("One Way Platform: ", m_grid.m_oneWay);
 
             EditorGUILayout.Space();
         }
@@ -419,6 +425,11 @@ public class GridEditor : Editor {
 
                     gameObj = (GameObject)PrefabUtility.InstantiatePrefab(prefab.gameObject);
                     gameObj.transform.position = align;
+
+                    // If one way plaftorm placement is enabled
+                    if (m_grid.m_oneWay)
+                        // Add the one way platform component to the instantiated object
+                        gameObj.AddComponent<OneWayPlatform>();
 
                     if (RandomOptionsAvalible())
                     {

@@ -31,6 +31,8 @@ public class MapEditor : MonoBehaviour {
 
     public bool m_helpBoxes = true;
 
+    public bool m_oneWay = false;
+
 	// Is used to draw Gizmos in the Scene
 	void  OnDrawGizmos() 
     {

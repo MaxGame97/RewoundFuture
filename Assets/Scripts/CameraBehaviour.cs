@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour {
 
     // Enumeratior representing the desired tracking mode
-    enum TrackingMode { Update, FixedUpdate }
+    enum TrackingMode { Update, FixedUpdate, LateUpdate }
 
     // Enumeratior representing the desired camera size mode
     enum CameraSizeMode { Unlocked, Clamped }
@@ -16,7 +16,7 @@ public class CameraBehaviour : MonoBehaviour {
     // --- Inspector values ---
     // ------------------------
 
-    [SerializeField] private TrackingMode trackingMode = TrackingMode.FixedUpdate;      // The desired tracking mode
+    [SerializeField] private TrackingMode trackingMode = TrackingMode.LateUpdate;       // The desired tracking mode
 
     [Space(6f)]
 
@@ -108,6 +108,17 @@ public class CameraBehaviour : MonoBehaviour {
     {
         // Unless the target is null, and this is the desired tracking mode
         if (target != null && trackingMode == TrackingMode.FixedUpdate)
+        {
+            // Track the target
+            TrackTarget();
+        }
+    }
+
+    // LateUpdate is called after all other update sequences
+    void LateUpdate()
+    {
+        // Unless the target is null, and this is the desired tracking mode
+        if (target != null && trackingMode == TrackingMode.LateUpdate)
         {
             // Track the target
             TrackTarget();
